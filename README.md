@@ -34,8 +34,8 @@ var ErrNoLuck = errors.New("no luck")
 
 func DoSomething(ctx context.Context, arg int) error {
   log := logr.FromContextOrDiscard(ctx)
-  lf := logfields.New("arg",arg) // func name saved here
-  lf.Debug(log, "starting") // filename & line saved here
+  lf := logfields.New("arg", arg) // func name saved here
+  lf.Debug(log, "starting") // filename & line printed also
   if arg == 0 {
     return lf.Error(ErrNoZero) // filename & line saved here
   }
@@ -51,7 +51,11 @@ func DoMain() {
   if err != nil {
     switch {
         case errors.Is(err, ErrNoZero):
-            fmt.Printf("not allowed: %s", err) // prints message, arg, func, filename, line
+            fmt.Printf("not allowed: %s", err) // err.Error() contains message, arg, func, filename, line
+        case errors.Is(err, ErrNoLuck):
+            if logfields.ValueString(err, "arg") == "1" {
+              fmt.Printf("you call 1")
+            }
     }
   }
 }
