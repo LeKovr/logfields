@@ -2,12 +2,12 @@
 
 ## Задача
 
-При выводе в лог или возврате ошибок иметь дополнительную информацию о
+При выводе в лог или возврате ошибок иметь дополнительную информацию про
 
-1. имени файла и строке возникновения собыия
-2. имени функции
-3. ее аргументах
-4. возможных значимых переменных
+1. имя файла и номер строки возникновения события
+2. имя функции
+3. ее аргументы
+4. возможные значимые переменные
 
 ## Текущее состояние
 
@@ -21,9 +21,9 @@ log = log.WithFields("var1", value1, "var2", value2, ...)
 
 ## Цели
 
-1. при возникновении возвращать ошибку без записи в журнал, но без потери дополнительной информации
-2. при анализе ошибки иметь возможность использовать `err.Is()`
-3. задавать доп информацию для ошибок и журнала без дублирования
+1. при возникновении ошибки возвращать ее без журналирования, но и без потери дополнительной информации
+2. при анализе ошибки иметь возможность использовать `errors.Is()`
+3. не дублировтаь доп информацию для ошибок и журнала
 
 ## Пример желаемого
 
@@ -32,9 +32,10 @@ log = log.WithFields("var1", value1, "var2", value2, ...)
 var ErrNoZero = errors.New("arg must not be zero")
 var ErrNoLuck = errors.New("no luck")
 
-func DoSomething(arg int) error {
+func DoSomething(ctx context.Context, arg int) error {
+  log := logr.FromContextOrDiscard(ctx)
   lf := logfields.New("arg",arg) // func name saved here
-  lf.Debug("starting") // filename & line saved here
+  lf.Debug(log, "starting") // filename & line saved here
   if arg == 0 {
     return lf.Error(ErrNoZero) // filename & line saved here
   }
