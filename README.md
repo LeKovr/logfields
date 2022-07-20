@@ -23,7 +23,7 @@ log = log.WithFields("var1", value1, "var2", value2, ...)
 
 1. при возникновении ошибки возвращать ее без журналирования, но и без потери дополнительной информации
 2. при анализе ошибки иметь возможность использовать `errors.Is()`
-3. не дублировтаь доп информацию для ошибок и журнала
+3. не дублировать доп информацию для ошибок и журнала
 
 ## Пример желаемого
 
@@ -62,3 +62,10 @@ func DoMain() {
 
 ```
 
+## See also
+
+* [Error handling and structured logging](https://groups.google.com/g/golang-nuts/c/qbAS7ojmQZg?pli=1)
+* [support for collections of key/value pairs](https://github.com/jjeffery/kv)
+* [Handling errors only once and logging them with full context in Golang](https://www.orsolabs.com/post/go-errors-and-logs/) (see ImpliedArgs)
+* [Embed logrus.Fields into error](https://github.com/suzuki-shunsuke/logrus-error)
+* [Embed zap.Field into error](https://github.com/suzuki-shunsuke/zap-error)
